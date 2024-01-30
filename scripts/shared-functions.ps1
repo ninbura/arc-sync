@@ -22,7 +22,7 @@ function Startup($config) {
 
 function GetUserPermission() {
   Write-Host "It is recommended that you close Arc before running this script" -ForegroundColor Yellow
-  Write-Host "Do you want to continue? [y/n]" -NoNewLine -ForegroundColor Yellow
+  Write-Host "Do you want to continue? [y/n]: " -NoNewLine -ForegroundColor Yellow
 
   $response = $Host.UI.ReadLine()
 
