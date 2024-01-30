@@ -1,4 +1,4 @@
-. ./shared-functions.ps1
+. $PSScriptRoot/shared-functions.ps1
 
 function BackupArcConfigurationFiles($config) {
   Write-Host "Copying arc configuration files to your local repo directory... " -NoNewLine -ForegroundColor Magenta
@@ -42,7 +42,7 @@ function Conclude($config) {
 }
 
 function main() {
-  $config = Get-Content -Path "../config.json" | ConvertFrom-Json
+  $config = Get-Content -Path "$PSScriptRoot/../config.json" | ConvertFrom-Json
   Startup $config
   GetUserPermission
   ValidateArcConfigurationDirectory $($config)?.ConfigDirectory

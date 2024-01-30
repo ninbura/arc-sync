@@ -24,8 +24,8 @@ function AddArcScriptsToProfile() {
   $finalIndex = $profileContents.Count - 1
   $additionalContents = @(
     "# Arc Scripts",
-    "Set-Alias -Name arc-backup -Value `"& $PSScriptRoot/arc-backup.ps1`"",
-    "Set-Alias -Name arc-sync -Value `"& $PSScriptRoot/arc-sync.ps1`""
+    "Set-Alias -Name arc-backup -Value `"$PSScriptRoot/arc-backup.ps1`"",
+    "Set-Alias -Name arc-sync -Value `"$PSScriptRoot/arc-sync.ps1`""
   )
   $profileAlreadyContainsArcScripts = $profileContents | Where-Object { $_ -like "*arc-backup*" -or $_ -like "*arc-sync*" }
 
