@@ -17,7 +17,7 @@ function DeleteConfigurationFiles($configDirectory) {
 }
 
 function SyncArcConfigurationFiles($config) {
-  Write-Host "Copying configuration files from backup directory to Arc's configuration directory... " -NoNewLine -ForegroundColor Magenta
+  Write-Host "Copying configuration files from backup directory to Arc's configuration directory..." -ForegroundColor Magenta
 
   if(!(test-path $($config)?.BackupDirectory)) {
     Write-Host "[FAIL]" -ForegroundColor Red
@@ -29,6 +29,8 @@ function SyncArcConfigurationFiles($config) {
   $latestBackup = Get-ChildItem -Path $($config)?.BackupDirectory -Filter "*.zip" `
     | Sort-Object -Property LastWriteTime -Descending `
     | Select-Object -First 1 -ExpandProperty FullName
+
+  Write-Host "The latest backup is: $latestBackup" -ForegroundColor Cyan
 
   try {
     Expand-Archive -Path $latestBackup -DestinationPath "$($($config)?.ArcConfigDirectory)/" -Force
@@ -52,7 +54,7 @@ function main() {
   Startup $config
   GetUserPermission
   ValidateArcConfigurationDirectory $config
-  SyncArcConfigurationFiles $($config)?.ArcConfigDirectory
+  SyncArcConfigurationFiles $config 
   Conclude
 }
 
