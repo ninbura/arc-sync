@@ -6,12 +6,9 @@ function Quit() {
 }
 
 function PrintConfig($config) {
-  Write-Host "Config Parent Directory - $($($config)?.ConfigParentDirectory)" -ForegroundColor Cyan
-  Write-Host "Config Relative Directory - $($($config)?.ConfigRelativeDirectory)" -ForegroundColor Cyan
-  Write-Host "Repo Directory - $($($config)?.RepoDirectory)" -ForegroundColor Cyan
-  Write-Host "Repo Url - $($($config)?.RepoUrl)" -ForegroundColor Cyan
-  Write-Host "Git Username - $($($config)?.GitUsername)" -ForegroundColor Cyan
-  Write-Host "Git Email - $($($config)?.GitEmail)`n" -ForegroundColor Cyan
+  Write-Host "Arc Config Directory - $($($config)?.ArcConfigDirectory)" -ForegroundColor Cyan
+  Write-Host "Backup Directory - $($($config)?.BackupDirectory)" -ForegroundColor Cyan
+  Write-Host ""
 }
 
 function Startup($config) {
@@ -21,8 +18,21 @@ function Startup($config) {
   PrintConfig $config
 }
 
+function ValidateArcConfigurationDirectory($config) {
+  Write-Host "Verifying that the Arc configuration directory exists... " -NoNewLine
+
+  if (!(test-path $($config).ArcConfigDirectory)) {
+    Write-Host "[FAIL]" -ForegroundColor Red
+    Write-Host "The Arc parent configuration directory you provided does not exist, please check your configuration file and try again." -ForgroundColor Red
+    
+    Quit
+  }
+
+  Write-Host "[OK]`n" -ForegroundColor Green
+}
+
 function GetUserPermission() {
-  Write-Host "It is recommended that you close Arc before running this script" -ForegroundColor Yellow
+  Write-Host "You need to close arc before running this script." -ForegroundColor Yellow
   Write-Host "Do you want to continue? [y/n]: " -NoNewLine -ForegroundColor Yellow
 
   $response = $Host.UI.ReadLine()
@@ -32,51 +42,4 @@ function GetUserPermission() {
   }
 
   Write-Host ""
-}
-
-function GetArcConfigDirectory($config) {
-  return "$($($config)?.ConfigParentDirectory)/$($($config)?.ConfigRelativeDirectory)"
-}
-
-function ValidateArcConfigurationDirectory($config, $configDirectory) {
-  Write-Host "Verifying that arc configuration directory exists... " -NoNewLine
-
-  if (!(test-path $($config).ConfigParentDirectory)) {
-    Write-Host "[FAIL]" -ForegroundColor Red
-    Write-Host "The Arc parent configuration directory you provided does not exist, please check your configuration file and try again." -ForgroundColor Red
-    
-    Quit
-  }
-
-  if (!(test-path $configDirectory)) {
-    New-Item -ItemType Directory -Path $configDirectory -Force
-  }
-
-  Write-Host "[OK]`n" -ForegroundColor Green
-}
-
-function CloneOrPullBackupRepository($config) {
-  try {
-    Write-Host "Cloning/Pulling backup repository... " -ForegroundColor Magenta
-
-    if (!(test-path $($config).RepoDirectory)) {
-      git clone $($config)?.RepoUrl $($config)?.RepoDirectory --config user.name=$($($config).GitUsername) --config user.email=$($($config).GitEmail)
-    } else {
-      git -C $($config)?.RepoDirectory pull
-    }
-  } catch {
-    Write-Host "[FAIL]" -ForegroundColor Red
-    Write-Host "There was an error cloning/pulling the repository, please check your configuration file and try again." -ForegroundColor Red
-
-    Quit
-  }
-
-  if (!(test-path $($config)?.RepoDirectory)) {
-    Write-Host "[FAIL]" -ForegroundColor Red
-    Write-Host "There was an error cloning/pulling the repository, please check your configuration file and try again." -ForegroundColor Red
-
-    Quit
-  }
-
-  Write-Host "Repository cloned/pulled successfully.`n" -ForegroundColor Green
 }
