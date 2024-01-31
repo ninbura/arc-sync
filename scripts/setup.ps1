@@ -13,7 +13,7 @@ function VerifyOrCreateProfile() {
   write-host "Verifying or creating profile... " -NoNewLine
 
   if (!(test-path $profile.CurrentUserAllHosts)) {
-    New-Item -Path $profile.CurrentUserAllHosts -ItemType File
+    New-Item -Path $profile.CurrentUserAllHosts -ItemType File -Force
   }
 
   write-host "[OK]`n" -ForegroundColor Green
