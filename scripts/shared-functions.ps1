@@ -6,7 +6,8 @@ function Quit() {
 }
 
 function PrintConfig($config) {
-  Write-Host "Config Directory - $($($config)?.ConfigDirectory)" -ForegroundColor Cyan
+  Write-Host "Config Parent Directory - $($($config)?.ConfigParentDirectory)" -ForegroundColor Cyan
+  Write-Host "Config Relative Directory - $($($config)?.ConfigRelativeDirectory)" -ForegroundColor Cyan
   Write-Host "Repo Directory - $($($config)?.RepoDirectory)" -ForegroundColor Cyan
   Write-Host "Repo Url - $($($config)?.RepoUrl)" -ForegroundColor Cyan
   Write-Host "Git Username - $($($config)?.GitUsername)" -ForegroundColor Cyan
@@ -33,18 +34,22 @@ function GetUserPermission() {
   Write-Host ""
 }
 
-function ValidateArcConfigurationDirectory($configDirectory) {
+function GetArcConfigDirectory($config) {
+  return "$($($config)?.ConfigParentDirectory)/$($($config)?.ConfigRelativeDirectory)"
+}
+
+function ValidateArcConfigurationDirectory($config, $configDirectory) {
   Write-Host "Verifying that arc configuration directory exists... " -NoNewLine
 
-  if (!(test-path $configDirectory)) {
+  if (!(test-path $($config).ConfigParentDirectory)) {
     Write-Host "[FAIL]" -ForegroundColor Red
-    Write-Host "The directory you provided does not exist, please check your configuration file and try again." -ForgroundColor Red
+    Write-Host "The Arc parent configuration directory you provided does not exist, please check your configuration file and try again." -ForgroundColor Red
     
     Quit
   }
 
-  if (!(test-path "$configDirectory/LocalCache/Local/Arc")) {
-    New-Item -ItemType Directory -Path "$configDirectory/LocalCache/Local/Arc" -Force
+  if (!(test-path $configDirectory)) {
+    New-Item -ItemType Directory -Path $configDirectory -Force
   }
 
   Write-Host "[OK]`n" -ForegroundColor Green

@@ -1,7 +1,8 @@
 # config.json example
 ```json
 {
-  "ConfigDirectory": "C:/Users/gabri/AppData/Local/Packages/TheBrowserCompany.Arc_ttt1ap7aakyb4/LocalCache/Local/Arc",
+  "ConfigParentDirectory": "C:/Users/gabri/AppData/Local/Packages/TheBrowserCompany.Arc_ttt1ap7aakyb4",
+  "ConfigRelativeDirectory": "/LocalCache/Local/Arc",
   "ConfigFilenames": [
     "StorableArchive.json",
     "StorableArchiveItems.json",

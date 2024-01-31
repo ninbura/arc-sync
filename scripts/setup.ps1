@@ -38,7 +38,7 @@ function AddArcScriptsToProfile() {
   write-host "Adding arc scripts to profile... " -NoNewLine
 
   if($profileContents.Length -eq 0) {
-    $profileContents += $additionalContents.Join("`n")
+    $profileContents += $($additionalContents -join "`n")
   } else {
     if($profileContents -notmatch "\s[\r\n]$") { $profileContents += "`n" }
 
