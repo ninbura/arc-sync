@@ -13,24 +13,25 @@ function DeleteConfigurationFiles($configDirectory) {
     Quit
   }
 
+  Write-Host ""
   Write-Host "Configuration files have been successfully deleted from arc's configuration directory.`n" -ForegroundColor Green
 }
 
 function SyncArcConfigurationFiles($config) {
-  Write-Host "Copying configuration files from backup directory to Arc's configuration directory..." -ForegroundColor Magenta
-
-  if(!(test-path $($config)?.BackupDirectory)) {
-    Write-Host "[FAIL]" -ForegroundColor Red
-    Write-Host "The provided backup directory does not exist, please check your configuration file and try again." -ForegroundColor Red
-
-    Quit
-  }
-
   $latestBackup = Get-ChildItem -Path $($config)?.BackupDirectory -Filter "*.zip" `
     | Sort-Object -Property LastWriteTime -Descending `
     | Select-Object -First 1 -ExpandProperty FullName
 
   Write-Host "The latest backup is: $latestBackup" -ForegroundColor Cyan
+  Read-Host "Do you want to continue? [y/n]: " -NoNewLine -ForegroundColor Yellow
+
+  if ($response -ne "y") {
+    Quit
+  }
+
+  DeleteConfigurationFiles $($config)?.ArcConfigDirectory
+
+  Write-Host "Copying configuration files from backup directory to Arc's configuration directory... " -ForegroundColor Magenta
 
   try {
     Expand-Archive -Path $latestBackup -DestinationPath "$($($config)?.ArcConfigDirectory)/" -Force
