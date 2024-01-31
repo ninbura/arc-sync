@@ -23,11 +23,6 @@ function SyncArcConfigurationFiles($config) {
     | Select-Object -First 1 -ExpandProperty FullName
 
   Write-Host "The latest backup is:`n$latestBackup" -ForegroundColor Cyan
-  $response = Read-Host "Your existing configuration is about to be deleted. Do you want to continue? [y/n]: " -NoNewLine -ForegroundColor Yellow
-
-  if ($response -ne "y") {
-    Quit
-  }
 
   DeleteConfigurationFiles $($config)?.ArcConfigDirectory
 
