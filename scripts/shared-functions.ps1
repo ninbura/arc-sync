@@ -36,11 +36,15 @@ function GetUserPermission() {
 function ValidateArcConfigurationDirectory($configDirectory) {
   Write-Host "Verifying that arc configuration directory exists... " -NoNewLine
 
-  if (!(test-path $($configDirectory))) {
-    Write-Host "p[FAIL]" -ForegroundColor Red
+  if (!(test-path $configDirectory)) {
+    Write-Host "[FAIL]" -ForegroundColor Red
     Write-Host "The directory you provided does not exist, please check your configuration file and try again." -ForgroundColor Red
     
     Quit
+  }
+
+  if (!(test-path "$configDirectory/LocalCache/Local/Arc")) {
+    New-Item -ItemType Directory -Path "$configDirectory/LocalCache/Local/Arc" -Force
   }
 
   Write-Host "[OK]`n" -ForegroundColor Green
