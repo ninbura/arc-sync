@@ -31,7 +31,6 @@ function SyncArcConfigurationFiles($config) {
   try {
     Expand-Archive -Path $latestBackup -DestinationPath "$($($config)?.ArcConfigDirectory)/" -Force
   } catch {
-    Write-Host "[FAIL]" -ForegroundColor Red
     Write-Host "There was an error copying the arc configuration files, please check your configuration file and try again." -ForegroundColor Red
     Write-Host $_.Exception.Message -ForegroundColor Red
 
